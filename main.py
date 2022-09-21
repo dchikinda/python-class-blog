@@ -9,15 +9,23 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 from forms import CreatePostForm, CreateRegisterForm, CreateLoginForm, CreateCommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
+import os
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+# Now moving the key, which is now changed, to the environment on heroku, and here in $ENV:SECRET_KEY
+# app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
+
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+# No longer using the local one, for online using PostgreSQL (still free at time of writing)
+# DATABASE_URL on heroku
+# Old uri is used called up when the database url isn't found here
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", 'sqlite:///blog.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
