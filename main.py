@@ -25,7 +25,7 @@ Bootstrap(app)
 # DATABASE_URL on heroku
 # Old uri is used called up when the database url isn't found here
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", 'sqlite:///blog.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///blog.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -62,7 +62,7 @@ class User(UserMixin, db.Model):
     # The "author" refers to the author property in the BlogPost class.
     posts = relationship("BlogPost", back_populates="author")
     comments = relationship("Comment", back_populates="comment_author")
-# db.create_all()
+db.create_all()
 
 
 class BlogPost(db.Model):
@@ -79,7 +79,7 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
     # Gotta get those comments related to this
     comments = relationship("Comment", back_populates="parent_post")
-# db.create_all()
+db.create_all()
 
 
 class Comment(db.Model):
@@ -94,7 +94,7 @@ class Comment(db.Model):
     parent_post = relationship("BlogPost", back_populates="comments")
     # The comment itself
     comment = db.Column(db.Text, nullable=False)
-# db.create_all()
+db.create_all()
 
 
 def admin_only(function):
